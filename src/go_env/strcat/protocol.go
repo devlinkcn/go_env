@@ -1,3 +1,4 @@
+// Package strcat 使用 HTTP 实现了字符串拼接的服务。
 package strcat
 
 import "net/http"
