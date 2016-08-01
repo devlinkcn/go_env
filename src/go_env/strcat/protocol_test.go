@@ -12,15 +12,29 @@ import (
 func TestHandler(t *testing.T) {
 	at := assert.New(t)
 
-	body := "{\"strings\":[\"prefix\",\"suffix\"]}"
-	r, err := http.NewRequest("POST", "/strcat", strings.NewReader(body))
-	at.Nil(err)
+	tests := []struct {
+		input  string
+		code   int
+		output string
+	}{
+		{"{\"strings\":[\"prefix\",\"suffix\"]}", http.StatusOK, "{\"string\":\"prefixsuffix\"}\n"},
+		{"abc", http.StatusBadRequest, ""},
+		{"{\"strings\":[\"1\",\"2\",\"3\"]}", http.StatusOK, "{\"string\":\"123\"}\n"},
+	}
 
-	w := httptest.NewRecorder()
+	for _, t := range tests {
+		r, err := http.NewRequest("POST", "/strcat", strings.NewReader(t.input))
+		at.Nil(err)
 
-	handler := New()
-	handler.ServeHTTP(w, r)
+		w := httptest.NewRecorder()
 
-	at.Equal(w.Code, http.StatusOK)
-	at.Equal(w.Body.String(), "{\"string\":\"prefixsuffix\"}\n")
+		handler := New()
+		handler.ServeHTTP(w, r)
+
+		at.Equal(w.Code, t.code)
+		if w.Code != http.StatusOK {
+			continue
+		}
+		at.Equal(w.Body.String(), t.output)
+	}
 }
