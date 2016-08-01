@@ -7,11 +7,11 @@ import (
 	"os"
 )
 
-type Config struct {
+type config struct {
 	Listen string
 }
 
-func LoadConfig() Config {
+func loadConfig() config {
 	var configFile string
 	flag.StringVar(&configFile, "c", "./config.json", "configure file")
 	flag.Parse()
@@ -21,7 +21,7 @@ func LoadConfig() Config {
 		log.Fatalln("read configure error:", err)
 	}
 
-	var c Config
+	var c config
 	if err := json.NewDecoder(f).Decode(&c); err != nil {
 		log.Fatalln("decode configure error:", err)
 	}
