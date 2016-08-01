@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	config := LoadConfig()
+	config := loadConfig()
 	handler := strcat.New()
 	http.Handle("/strcat", handler)
 	http.ListenAndServe(config.Listen, nil)
