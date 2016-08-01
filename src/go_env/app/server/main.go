@@ -3,6 +3,7 @@ package main
 import (
 	_ "expvar"
 	"net/http"
+	_ "net/http/pprof"
 
 	"go_env/strcat"
 )
