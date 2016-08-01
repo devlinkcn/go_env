@@ -2,6 +2,7 @@ package strcat
 
 import (
 	"encoding/json"
+	"expvar"
 	"net/http"
 )
 
@@ -13,7 +14,9 @@ type strcatReply struct {
 	String string `json:"string"`
 }
 
-type strcat struct{}
+type strcat struct {
+	count *expvar.Int
+}
 
 func (s *strcat) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var arg strcatArg
@@ -28,6 +31,7 @@ func (s *strcat) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "reply error:"+err.Error(), http.StatusInternalServerError)
 		return
 	}
+	s.count.Add(1)
 }
 
 func joinStrings(strings []string) string {

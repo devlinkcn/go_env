@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "expvar"
 	"net/http"
 
 	"go_env/strcat"
