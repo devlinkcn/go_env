@@ -15,3 +15,11 @@ func TestJoinStrings(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func BenchmarkJoinStrings(b *testing.B) {
+	input := []string{"1", "2", "3", "4", "5"}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		joinStrings(input)
+	}
+}
