@@ -5,7 +5,6 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
-	"testing/quick"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -37,15 +36,5 @@ func TestHandler(t *testing.T) {
 			continue
 		}
 		at.Equal(w.Body.String(), t.output)
-	}
-}
-
-func TestJoinStrings(t *testing.T) {
-	f := func(s []string) bool {
-		out := joinStrings(s)
-		return strings.Join(s, "") == out
-	}
-	if err := quick.Check(f, nil); err != nil {
-		t.Error(err)
 	}
 }
