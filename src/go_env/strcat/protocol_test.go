@@ -38,3 +38,35 @@ func TestHandler(t *testing.T) {
 		at.Equal(w.Body.String(), t.output)
 	}
 }
+
+func TestHandler17(t *testing.T) {
+	tests := []struct {
+		input  string
+		code   int
+		output string
+	}{
+		{"{\"strings\":[\"prefix\",\"suffix\"]}", http.StatusOK, "{\"string\":\"prefixsuffix\"}\n"},
+		{"abc", http.StatusBadRequest, ""},
+		{"{\"strings\":[\"1\",\"2\",\"3\"]}", http.StatusOK, "{\"string\":\"123\"}\n"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.input, func(t *testing.T) {
+			at := assert.New(t)
+
+			r, err := http.NewRequest("POST", "/strcat", strings.NewReader(test.input))
+			at.Nil(err)
+
+			w := httptest.NewRecorder()
+
+			handler := New()
+			handler.ServeHTTP(w, r)
+
+			at.Equal(w.Code, test.code)
+			if w.Code != http.StatusOK {
+				return
+			}
+			at.Equal(w.Body.String(), test.output)
+		})
+	}
+}
