@@ -1,2 +1,5 @@
 pkg/*
 bin/*
+/*.test
+/*.prof
+/*.svg
