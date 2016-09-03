@@ -14,9 +14,6 @@ type Handler interface {
 // New 生成一个新的 Handler
 func New() Handler {
 	count := expvar.Get("count")
-	if count == nil {
-		count = expvar.NewInt("count")
-	}
 	return &strcat{
 		count: count.(*expvar.Int),
 	}
